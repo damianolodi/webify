@@ -25,6 +25,7 @@ def remove_background(img):
         New image with the white background removed.
     """
 
+    typer.echo("Remove white background from the image...")
     img = img.convert("RGBA")
 
     # Extract RGB data
@@ -44,8 +45,37 @@ def remove_background(img):
     return img
 
 
-def resize_image():
-    pass
+def resize_image(img, resize):
+    """Resize the image maintaining proportions
+    
+    When the resizing is applied, the Image.LANCZOS resample algotithm provided
+    by the Pillow module is applied by deafult. This choiche is given by the
+    fact that, even if it is the less perfomrmant, it produce the better results
+    both in upscaling and downscaling.
+
+    Parameters
+    ----------
+    img: Image object
+        Image that should be modified.
+    resize: int
+        width of the new image. 
+
+    Returns
+    -------
+    img: Image object
+        New resized image.
+    """
+
+    # Calculate the new dimensions
+    old_width, old_height = img.size
+    new_width = resize
+    new_height = round(new_width * old_height / old_width)
+    new_size = (new_width, new_height)
+
+    typer.echo("Resize the new image to {}x{}...".format(new_width, new_height))
+    img = img.resize(new_size, resample=Image.LANCZOS)
+
+    return img
 
 
 def save_jpg():
@@ -84,6 +114,9 @@ def main(
     if remove_bg:
         img = remove_background(img)
         format_ = "PNG"
+
+    if resize:
+        img = resize_image(img, resize)
 
 
 if __name__ == "__main__":
