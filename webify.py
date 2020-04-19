@@ -34,6 +34,15 @@ def main(
 
     img = Image.open(path)
 
+    # Store variable for future reference
+    allowed_formats = ["PNG", "JPEG"]
+    format_ = img.format
+    filename = img.filename
+
+    if format_ not in allowed_formats:
+        typer.echo("ERROR: image format not allowed. Use PNG or JPEG.")
+        raise typer.Exit(2)
+
 
 if __name__ == "__main__":
     typer.run(main)
