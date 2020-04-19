@@ -138,6 +138,24 @@ def main(
     remove_bg: bool = typer.Option(False, help="Remove white background."),
 ):
     """Improve image efficency for web usage.
+
+    PATH is the path to the image that should be modified. Only PNG and JPEG
+    images are supporte. If the format is not supported, an error is returned.
+
+    Currently, the original image can be resized passing the appropriate option.
+    The size is considered to be the width of the new image and proportions are
+    always maintained.
+
+    The program can strip white background from images. Currently, the
+    algorithm is in a primitive state and takes into consideration only "pure-white"
+    pixels. The process return better quality if the original image is large sized.
+    Moreover, conversion to PNG happens automatically if this option is requested.
+
+    During the saving process, efficency improvements are applied to both formats.
+    Dpi is set to 72 and optimization is activated, to reduce image size. Moreover,
+    JPEG images are saved in progressive mode to improve load efficency.
+
+    Visit "https://github.com/damianolodi/webify" for more informations and examples.
     """
 
     # Check path existance
