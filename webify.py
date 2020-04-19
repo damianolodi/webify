@@ -78,12 +78,58 @@ def resize_image(img, resize):
     return img
 
 
-def save_jpg():
-    pass
+def save_jpg(img, filename):
+    """Save the image as JPEG.
+
+    During the saving process, the following parameters are applied, to improve
+    web efficency and maintain quality:
+    - dpi is 72 ppi
+    - optimization is active
+    - quality is 75%
+    - jpeg is saved in progressive format
+
+    Moreover, the image is saved in the original directory and the suffix "-mod"
+    is added to the name, so that the old image is not overwritten. 
+    
+    Parameters
+    ----------
+    img: Image object
+        Image that should be modified.
+    filename: str
+        Path of the original image.
+    """
+
+    typer.echo("Save image in JPEG format...")
+
+    new_name = filename.split(".")[0] + "-mod.jpg"
+    filename = filename.replace(filename, new_name)
+
+    img.save(filename, optimize=True, progressive=True, dpi=(72, 72))
 
 
-def save_png():
-    pass
+def save_png(img, filename):
+    """Save the image as PNG.
+
+    During the saving process, the following parameters are applied, to improve
+    web efficency and maintain quality:
+    - optimization is active
+    - dpi is 72 ppi
+
+    Moreover, the image is saved in the original directory and the suffix "-mod"
+    is added to the name, so that the old image is not overwritten. 
+    
+    Parameters
+    ----------
+    img: Image object
+        Image that should be modified.
+    filename: str
+        Path of the original image."""
+
+    typer.echo("Save image in PNG format...")
+    new_name = filename.split(".")[0] + "-mod.png"
+    filename = filename.replace(filename, new_name)
+
+    img.save(filename, optimize=True, dpi=(72, 72))
 
 
 def main(
@@ -115,8 +161,17 @@ def main(
         img = remove_background(img)
         format_ = "PNG"
 
+    # Resize the image
     if resize:
         img = resize_image(img, resize)
+
+    # Save the modified image
+    if format_ == "PNG":
+        save_png(img, filename)
+    else:
+        save_jpg(img, filename)
+
+    typer.echo("All modifications completed.")
 
 
 if __name__ == "__main__":
